@@ -1,0 +1,20 @@
+The purpose of this project is to examine the viability of using deep reinforcement learning to efficiently provision a set of virtual  machine requests given a set of physical machines.
+
+Problem Statement
+
+What is Deep Reinforcement Learning?
+
+Reinforcement learning is a type of goal-oriented machine learning which learn how to achieve an objective over a large number of steps by maximising along a particular dimension.
+
+Why use DRL over another type of machine learning?
+
+There are 3 main classes of ML: Unsupervised, Supervised, and Reinforcement. Unsupervised learning algorithms learn the similarities between things, and so are best suited to anoaly detection. Supervised learning requires a labelled data set, and can learn the corrolations between things and their labels, which is suited to classification. Reinforcement learning is goal-oriented, and uses reward values to continually maximise return along a particular dimension. This is perfectly suited to our problem space, where we aim to maximise the revenue of a cloud service provider by optimising VM packing density.
+
+DRL judges actions based on the results they produce in order to determine the best action for a given scenario. This
+
+Domain Selection:
+This refers to which inputs and outputs we should care about. Here, the inputs would be the available physical machines and the VM requests, and the outputs would be the efficiency (machines used compared to some lower bound), and the revenue gained for those VMs. Revenue models are openly available from a number of cloud service providers such as Microsoft, Amazon and Google.
+
+Considerations:
+
+A gamma value is used to dampen the reward value from future timesteps, meaning we can vary how much the algorithm cares about immediate vs long term gratification.
