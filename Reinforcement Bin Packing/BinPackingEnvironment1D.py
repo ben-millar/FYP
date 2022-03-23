@@ -49,7 +49,7 @@ class BinPacking(object):
             self.logs['placed'] = self.logs['placed'] + 1
 
         # Returns true if all of our bins are at (or close to) capacity
-        isTerminalState = np.all((self.min_item_size > self.state))
+        isTerminalState = np.all((self.min_item_size >= self.state))
 
         # Empty placeholder debug info dict
         info = {}
