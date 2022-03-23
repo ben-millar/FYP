@@ -1,5 +1,3 @@
-from importlib.metadata import metadata
-from socket import getnameinfo
 from gym.spaces import Discrete, Box
 import numpy as np
 
@@ -40,12 +38,12 @@ class BinPacking(object):
             self.logs['discarded'] = self.logs['discarded'] + 1
         elif self.state[action] < item_size:
             # Attempted to place item in a bin that was too small
-            reward = -item_size
+            reward = -1
             self.logs['misplaced'] = self.logs['misplaced'] + 1
         else:
             # Successfully placed item in a bin
             self.state[action] -= item_size 
-            reward = item_size
+            reward = 1
             # Generate a new item for the next step
             self.getNewItem()
             self.logs['placed'] = self.logs['placed'] + 1
