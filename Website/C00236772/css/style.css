@@ -89,10 +89,10 @@ h1,h2,h3,h4,h5,h6 {
   }
   
   .title {
-    
+    display: block;
+    overflow: auto;
     background-color: #101010;
     color: #FFF;
-    height: 100px;
     text-align: left;
     padding: 16px;
   }
@@ -147,43 +147,14 @@ h1,h2,h3,h4,h5,h6 {
   /* ######### FOOTER ######### */
 
   footer {
-    color: white;
+    position: absolute;
+    bottom: 0;
     text-align: center;
-    background: #101010;
-    margin-left: 250px;
     padding: 20px 0px;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    min-height: 8vh;
-  }
-  
-  footer p {
-    font-size: 14px;
-    color: #DDD;
   }
   
   footer ul {
     margin-bottom: 0px;
     display: flex;
     flex-direction: row;
-  }
-  
-  footer ul li {
-    margin: 0px 8px;
-  }
-  
-  footer ul li a {
-    font-size: 36px;
-    cursor: pointer;
-  }
-
-  /* One more time, with feeling */
-  
-  @media(max-width: 800px){
-    footer {
-      padding: 80px 15px;
-    }
   }
