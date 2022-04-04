@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+}
+
+img {
+    width: 40%;
+    height: auto;
+}
+
+@media screen and (max-width: 900px) {
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Roboto Slab', sans-serif;
+}
+
+/* ##### NAVIGATION BAR ##### */
+
+.sidenav {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #101010;
+  color: #FFF;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 1px;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 0px;
+}
+
+.sidenav h1 {
+  font-size: 32px;
+  padding: 32px 32px 26px 50px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #FFF;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  background-color: #F8F8F8;
+  color: black;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* ######## WRAPPER ######## */
+
+#wrapper {
+    background: #F8F8F8;
+  
+    color: #101010;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 250px;
+  
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+
+  a{
+    color: #F8F8F8;
+    text-decoration: none;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  .title {
+    
+    background-color: #101010;
+    color: #FFF;
+    height: 100px;
+    text-align: left;
+    padding: 16px;
+  }
+
+  .title h1 {
+    font-family: 'Roboto Slab', sans-serif;
+    font-weight: 300;
+  }
+
+  .title h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+  }
+  
+  .content {
+    color: #333;
+    font-size: 1rem;
+    text-align: justify;
+    padding: 32px;
+  }
+
+  .content a {
+    color: #08228b;
+  }
+
+  .content p {
+    margin: 20px;
+  }
+
+  /* Look out for the phones once again */
+
+  @media(max-width:800px) {
+
+    #wrapper {
+      min-height: 600px;
+    }
+  
+    #wrapper h1{
+      font-size:36px;
+    }
+  
+    #wrapper h3 {
+      font-size: 18px;
+    }
+  
+    #wrapper a.btn {
+      padding: 15px 40px;
+    }
+
+  }
+
+  /* ######### FOOTER ######### */
+
+  footer {
+    color: white;
+    text-align: center;
+    background: #101010;
+    margin-left: 250px;
+    padding: 20px 0px;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    min-height: 8vh;
+  }
+  
+  footer p {
+    font-size: 14px;
+    color: #DDD;
+  }
+  
+  footer ul {
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  footer ul li {
+    margin: 0px 8px;
+  }
+  
+  footer ul li a {
+    font-size: 36px;
+    cursor: pointer;
+  }
+
+  /* One more time, with feeling */
+  
+  @media(max-width: 800px){
+    footer {
+      padding: 80px 15px;
+    }
+  }

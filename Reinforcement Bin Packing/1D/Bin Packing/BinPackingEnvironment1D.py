@@ -21,7 +21,7 @@ class BinPacking(object):
         # Our actions will index into our array of bins, or reject the item
         self.action_space = Discrete(len(self.state))
         
-        self.reward_range = (-1, 1)
+        self.reward_range = (-10, capacity/2)
 
         self.logs = { 'placed':0, 'misplaced':0, 'discarded':0 }
 
@@ -38,12 +38,12 @@ class BinPacking(object):
             self.logs['discarded'] = self.logs['discarded'] + 1
         elif self.state[action] < item_size:
             # Attempted to place item in a bin that was too small
-            reward = -1
+            reward = -10
             self.logs['misplaced'] = self.logs['misplaced'] + 1
         else:
             # Successfully placed item in a bin
             self.state[action] -= item_size 
-            reward = 1
+            reward = item_size
             # Generate a new item for the next step
             self.getNewItem()
             self.logs['placed'] = self.logs['placed'] + 1
