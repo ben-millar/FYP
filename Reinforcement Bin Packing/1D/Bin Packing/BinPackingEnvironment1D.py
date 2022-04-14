@@ -9,7 +9,8 @@ class BinPacking(object):
         self.num_bins = num_bins
         self.min_item_size = min_item_size
 
-        # An array of bins with an integer representing their remaining capacity
+        # An array of bins with an integer representing their remaining capacity,
+        # with one at the end representing the next item to be placed
         self.state = np.full((self.num_bins + 1), self.capacity)
 
         high = np.full(self.state.size, self.capacity)
@@ -21,7 +22,7 @@ class BinPacking(object):
         # Our actions will index into our array of bins, or reject the item
         self.action_space = Discrete(len(self.state))
         
-        self.reward_range = (-10, capacity/2)
+        self.reward_range = (-10, 1)
 
         self.logs = { 'placed':0, 'misplaced':0, 'discarded':0 }
 

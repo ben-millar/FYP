@@ -1,55 +1,79 @@
+from cgitb import reset
+from xmlrpc.client import Boolean
 from gym.spaces import Discrete, Box
 import numpy as np
 
-class BinPacking(object):
+
+class KnapsackPacking(object):
     metadata = {}
 
-    def __init__(self, num_bins, capacity, min_item_size) -> None:
+    CAPACITIES = 0
+    VALUES = 1
+
+    def __init__(self, num_knapsacks, capacity, min_item_size=1, max_item_size=10, min_item_value=1, max_item_value=100) -> None:
         self.capacity = capacity # Max capacity of a bin
-        self.num_bins = num_bins
+        self.num_knapsacks = num_knapsacks
         self.min_item_size = min_item_size
+        self.max_item_size = max_item_size
+        self.min_item_value = min_item_value
+        self.max_item_value = max_item_value
 
-        # An array of bins with an integer representing their remaining capacity
-        self.state = np.full((self.num_bins + 1), self.capacity)
+        # Initialise environment
+        self.state = self.reset()
 
-        high = np.full(self.state.size, self.capacity)
-        low = np.full(self.state.size, 0)
+        min = np.vstack((
+            np.full((self.num_knapsacks + 1), 0),
+            np.full((self.num_knapsacks + 1), 0)
+        ))
+
+        max = np.vstack((
+            np.full((self.num_knapsacks + 1), self.capacity),
+            np.full((self.num_knapsacks + 1), max_item_value * (capacity/min_item_size))
+        ))
 
         # Our observation space is each possible value of a bin
-        self.observation_space = Box(low, high, dtype=np.int)
+        self.observation_space = Box(
+            low=min,
+            high=max,
+            shape=(2,self.num_knapsacks+1),
+            dtype=np.int
+        )
         
         # Our actions will index into our array of bins, or reject the item
-        self.action_space = Discrete(len(self.state))
+        self.action_space = Discrete(len(self.state[0]))
         
-        self.reward_range = (-1, 1)
+        self.reward_range = (-1, max_item_value)
 
         self.logs = { 'placed':0, 'misplaced':0, 'discarded':0 }
 
 
     def step(self, action):
-        item_size = self.state[self.num_bins]
+        item_size = self.state[self.CAPACITIES][self.num_knapsacks]
+        item_value = self.state[self.VALUES][self.num_knapsacks]
 
-        if action == len(self.state) - 1:
+        if action == len(self.state[self.CAPACITIES]) - 1:
             # Discard item without trying to place it
-            reward = -1
-            # Generate a new item for the next step
+            reward = 0
             self.getNewItem()
-            # Log event
             self.logs['discarded'] = self.logs['discarded'] + 1
-        elif self.state[action] < item_size:
-            # Attempted to place item in a bin that was too small
-            reward = -1
-            self.logs['misplaced'] = self.logs['misplaced'] + 1
         else:
-            # Successfully placed item in a bin
-            self.state[action] -= item_size 
-            reward = 1
-            # Generate a new item for the next step
-            self.getNewItem()
-            self.logs['placed'] = self.logs['placed'] + 1
+            if self.state[self.CAPACITIES][action] < item_size:
+                # Attempted to place item in a bin that was too small
+                reward = 0
+                self.logs['misplaced'] = self.logs['misplaced'] + 1
+            else:
+                # Successfully placed item in a bin
+                self.state[self.CAPACITIES][action] -= item_size
+                self.state[self.VALUES][action] += item_value
 
-        # Returns true if all of our bins are at (or close to) capacity
-        isTerminalState = np.all((self.min_item_size >= self.state))
+                reward = item_value
+
+                self.getNewItem()
+
+                self.logs['placed'] = self.logs['placed'] + 1
+
+        # Returns true if all of our bins are at capacity
+        isTerminalState = np.all((self.min_item_size >= self.state[self.CAPACITIES]))
 
         # Empty placeholder debug info dict
         info = {}
@@ -58,8 +82,8 @@ class BinPacking(object):
 
 
     def getNewItem(self):
-        self.state[self.num_bins] = \
-            np.random.randint(low=self.min_item_size, high=self.capacity/2, size=1)
+        self.state[self.CAPACITIES][self.num_knapsacks] = np.random.randint(low=self.min_item_size, high=self.max_item_size)
+        self.state[self.VALUES][self.num_knapsacks] = np.random.randint(low=self.min_item_value, high=self.max_item_value)
 
 
     def render(self):
@@ -67,6 +91,17 @@ class BinPacking(object):
 
 
     def reset(self):
-        self.state = np.full((self.num_bins + 1), self.capacity)
+        # np array representing capacities of each knapsack,
+        # with an extra item at the end representing the next to be placed
+        capacities = np.full((self.num_knapsacks + 1), self.capacity)
+
+        # np array representing values of each knapsack,
+        # with an extra item at the end representing the next to be placed
+        values = np.full((self.num_knapsacks + 1), 0)
+
+        # Stitch our [n] arrays into one [2, n] array
+        self.state = np.vstack((capacities, values))
+
         self.getNewItem()
+
         return self.state
