@@ -35,14 +35,14 @@ class BinPacking2D(object):
         # Actions 0-n select a bin, n+1 discards item
         self.action_space = Discrete(num_bins + 1)
 
-        self.reward_range = (0, 10)
+        self.reward_range = (-(max_x * max_y), (max_x * max_y))
 
 
     def step(self, action):
         # Discard item
         if (action == self.num_bins):
             info = { 'placed':0, 'misplaced':0, 'discarded':1 }
-            reward = 0
+            reward = -1
             self.getNewItem()
         else:
             new_item    = self.state[self.num_bins]
@@ -53,10 +53,10 @@ class BinPacking2D(object):
             # If this placement has caused any of our dimensions to go below 0
             if np.any((0 > remaining_capacity)):
                 info = { 'placed':0, 'misplaced':1, 'discarded':0 }
-                reward = 0
+                reward = -new_item.prod() # Product of x*y
             else:
                 info = { 'placed':1, 'misplaced':0, 'discarded':0 }
-                reward = 10
+                reward = new_item.prod() # Product of x*y
                 self.state[action] = remaining_capacity
                 self.getNewItem()
 
