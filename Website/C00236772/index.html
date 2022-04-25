@@ -34,7 +34,7 @@
                 <a href="#student_details"><li>Student Details</li></a>
                 <a href="#background"><li>Background</li></a>
                 <a href="#research_questions"><li>Research Questions</li></a>
-                <a href="#work_so_far"><li>Work so far</li></a>
+                <a href="#modelling"><li>Domain modelling</li></a>
                 <a href="#experiments"><li>Experiments</li></a>
                 <a href="#results"><li>Results</li></a>
                 <a href="#conclusions"><li>Conclusions</li></a>
@@ -91,26 +91,39 @@
 
                     <h2 id="research_questions"><a href="#research_questions">2. Research Questions</a></h2>
                     <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
-
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
+                    Infrastructure-as-a-service is undeniably a huge industry, and it is estimated that it will continue to grow by 23.2% year-on-year until 2027 (Gaul, 2022). 
+                    As demand for these services increases, so too will the amount of work required to allocate these requests. 
+                    Traditionally, these problems have been solved using complex integer linear programming techniques, or one-size-fits-all heuristics like first-fit decreasing (FFD) – 
+                    I posit that by harnessing recent advances in machine learning, particularly concerning the efficiency of deep Q networks, we can reduce both the complexity of mapping 
+                    these requests and the amount of space wasted. Harnessing this knowledge could not only improve efficiency at the point of allocation but also enable cloud service providers 
+                    to tailor their pricing model based on their current capacity to encourage consumer behaviour in line with the optimal policy, which in turn would allow providers to offer more competitive rates.
 
                     <br><br><br>
 
-                    <h2 id="work_so_far"><a href="#work_so_far">3. Work so far</a></h2>
+                    <h2 id="modelling"><a href="#modelling">3. Domain modelling</a></h2>
                     <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
+                    I chose first to simplify the problem, as machine learning was a totally new domain to me and I wanted to limit the number of moving parts. 
+                    To this end, I decided to model it as an online 1-dimensional  <a href="https://en.wikipedia.org/wiki/Bin_packing_problem">bin packing problem</a> 
+                    in which we have some number of bins, or containers, each with some non-negative integer capacity.
+                    
+                    <div align="center">
+                        <br><img src="images/binpacking.jpg" alt="Diagram showing a 1-dimensional bin-packing environment"><br>
+                    </div>
 
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
+                    At each time step, we will generate a new item with a size between 1 and our bin capacity which we must either place in one of our bins, or discard. 
+                    This process would continue until all of our bins became full, or we exceeded some maximum number of timesteps.<br><br>
 
+                    The goal was to train a reinforcement learning agent to the point where it could assess a given state (I.e., a set of bins with various capacities, 
+                    and an incoming item to be placed) and determine which action was likely to lead to the highest long-term reward.<br><br>
+                    
+                    From here, I incrementally increased 
+                    the complexity of the environment bringing it closer to the VM allocation problem. First, I introduced a value associated with each item; the goal now
+                    was to maximise the total value contained in each bin by the end of the simulation. From here, I increased the dimensionality of the problem so that both 
+                    the bins and the items had an x and a y component to their size, meaning the following condition had to be satisfied in order for an item to be placed successfully:
+
+                    <div align="center">
+                        <br><img src="images/placement_condition.jpg" alt="Mathematical notation of the placement precondition: (item_x ≤ bin_x AND item_y ≤ bin_y)" style="width:474px;height:82px;"><br>
+                    </div>
                     <br><br><br>
                     
                     <h2 id="experiments"><a href="#experiments">4. Experiments</a></h2>

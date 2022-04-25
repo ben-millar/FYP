@@ -40,7 +40,7 @@ class KnapsackPacking(object):
         # Our actions will index into our array of bins, or reject the item
         self.action_space = Discrete(len(self.state[0]))
         
-        self.reward_range = (-1, max_item_value)
+        self.reward_range = (-max_item_size, (max_item_value*max_item_value*max_item_value)/100)
 
         self.logs = { 'placed':0, 'misplaced':0, 'discarded':0 }
 
@@ -57,14 +57,14 @@ class KnapsackPacking(object):
         else:
             if self.state[self.CAPACITIES][action] < item_size:
                 # Attempted to place item in a bin that was too small
-                reward = 0
+                reward = -item_size
                 self.logs['misplaced'] = self.logs['misplaced'] + 1
             else:
                 # Successfully placed item in a bin
                 self.state[self.CAPACITIES][action] -= item_size
                 self.state[self.VALUES][action] += item_value
 
-                reward = item_value
+                reward = (item_value * item_value * item_value) / 100
 
                 self.getNewItem()
 

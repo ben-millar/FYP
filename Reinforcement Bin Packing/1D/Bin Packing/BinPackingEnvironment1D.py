@@ -32,7 +32,7 @@ class BinPacking(object):
 
         if action == len(self.state) - 1:
             # Discard item without trying to place it
-            reward = -1
+            reward = -5
             # Generate a new item for the next step
             self.getNewItem()
             # Log event
@@ -44,7 +44,7 @@ class BinPacking(object):
         else:
             # Successfully placed item in a bin
             self.state[action] -= item_size 
-            reward = item_size
+            reward = 1
             # Generate a new item for the next step
             self.getNewItem()
             self.logs['placed'] = self.logs['placed'] + 1

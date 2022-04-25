@@ -61,9 +61,7 @@ class BinPacking2D(object):
                 self.getNewItem()
 
         # Returns true if the x OR y capacities of all bins are below the minimum item sizes
-        isTerminalState = \
-            np.all(self.min_x >= self.state[:,0]) \
-            or np.all(self.min_y >= self.state[:,1])
+        isTerminalState = np.all(self.state[:,0] <= self.min_x) or np.all(self.state[:,1] <= self.min_y)
 
         return self.state, reward, isTerminalState, info
 
