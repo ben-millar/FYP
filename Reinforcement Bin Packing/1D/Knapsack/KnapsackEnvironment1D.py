@@ -51,24 +51,23 @@ class KnapsackPacking(object):
 
         if action == len(self.state[self.CAPACITIES]) - 1:
             # Discard item without trying to place it
-            reward = 0
+            reward = -10
             self.getNewItem()
             self.logs['discarded'] = self.logs['discarded'] + 1
+        elif self.state[self.CAPACITIES][action] < item_size:
+            # Attempted to place item in a bin that was too small
+            reward = -10
+            self.logs['misplaced'] = self.logs['misplaced'] + 1
         else:
-            if self.state[self.CAPACITIES][action] < item_size:
-                # Attempted to place item in a bin that was too small
-                reward = -item_size
-                self.logs['misplaced'] = self.logs['misplaced'] + 1
-            else:
-                # Successfully placed item in a bin
-                self.state[self.CAPACITIES][action] -= item_size
-                self.state[self.VALUES][action] += item_value
+            # Successfully placed item in a bin
+            self.state[self.CAPACITIES][action] -= item_size
+            self.state[self.VALUES][action] += item_value
 
-                reward = (item_value * item_value * item_value) / 100
+            reward = item_value
 
-                self.getNewItem()
+            self.getNewItem()
 
-                self.logs['placed'] = self.logs['placed'] + 1
+            self.logs['placed'] = self.logs['placed'] + 1
 
         # Returns true if all of our bins are at capacity
         isTerminalState = np.all((self.min_item_size >= self.state[self.CAPACITIES]))
