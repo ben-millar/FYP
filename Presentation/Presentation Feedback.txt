@@ -1,7 +1,0 @@
-Project feedback:
-
-Document research so far!!!!
-
-Getting relevant data could be a problem; I should look into this sooner rather than later.
-
-What is the benchmark I'm testing against? Max possible revenue might be tough to know.

@@ -38,7 +38,6 @@
                 <a href="#experiments"><li>Experiments</li></a>
                 <a href="#results"><li>Results</li></a>
                 <a href="#conclusions"><li>Conclusions</li></a>
-                <a href="#future_work"><li>Future Work</li></a>
                 <a href="docs/Ben Millar CV.pdf"><li>CV</li></a>
 
                 <footer>
@@ -78,7 +77,7 @@
                     <h4>Email: ben_millar@yahoo.ie | C00236772@itcarlow.ie</h4>
                     </table>
 
-                    <br><br><br>
+                    <br><br>
 
                     <!--Background-->
                     <h2 id="background"><a href="#background">1. Background and Motivation</a></h2>
@@ -128,49 +127,82 @@
                     
                     <h2 id="experiments"><a href="#experiments">4. Experiments</a></h2>
                     <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
+                    <h3>Bin packing environment</h3><br>
+                    The goal of the first experiment was to increase the accuracy with which items were allocated – that is, minimise the number of misplacements – to demonstrate that a DRL 
+                    agent was capable of extracting some reward signal from our custom environment and acting on it in such a way as to improve its performance.
+                    <br><br>
+                    To recap, at each timestep in this environment, the agent could attempt to allocate the current item to one of our bins or discard it; as such, the following 3 results were possible:
+                    <br><br>&emsp;&emsp;1.	<b>Placed</b>: The object was successfully placed in a bin with sufficient capacity to hold it.
+                    <br><br>&emsp;&emsp;2.	<b>Misplaced</b>: The agent attempted to place the object in a bin without sufficient capacity, meaning it was carried over to the next timestep to try again.
+                    <br><br>&emsp;&emsp;3.	<b>Discarded</b>: The agent chose to discard the item without attempting to place it.
+                    <br><br>Each of these outcomes carried its own reward value which I tuned as follows:
+                    <br><br>&emsp;&emsp;1.	<b>Constant reward values</b>: The agent receives a reward of +1 for placing an item, and a penalty of -1 for misplacing an item.
+                    <br><br>&emsp;&emsp;2.	<b>Linear reward values</b>: The agent receives a reward equal to +(item size) for placing an item, and a penalty of –(item size) for misplacing an item.
+                    <br><br>&emsp;&emsp;3.	<b>Asymmetric reward values</b>: The agent receives a reward of +1 for placing an item, and a penalty of -10 for misplacing an item.
+                    <br><br>Each of these methods was attempted with:
+                    <br><br>&emsp;&emsp;1.	<b>No discard penalty.</b>
+                    <br><br>&emsp;&emsp;2.	<b>Small discard penalty</b>: Penalty equal to ½ of the misplaced item penalty.
+                    <br><br>&emsp;&emsp;3.	<b>Large discard penalty</b>: Penalty equal to the misplaced item penalty.
 
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
+                    <br><br><br>
 
+                    <h3>Knapsack environment</h3><br>
+                    Moving on from the bin-packing environment, I modelled a 1-dimensional knapsack problem where, in addition to size, each item had a value associated with it. The goal in this environment 
+                    was not only to pack the items efficiently, but in such a way as to maximise the value contained within each bin, or knapsack, by the end of the episode.
+                    
+                    <br><br><br>
+
+                    <h3>VM Allocation environment</h3><br>
+                    This environment is a multi-dimensional version of our knapsack problem, whereby each item (and equally each bin) has multiple dimensions which must be considered when placing:
+                    <br><br>&emsp;&emsp;1.	Number of vCPUs.
+                    <br><br>&emsp;&emsp;2.	RAM in GiB
+                    <br><br>&emsp;&emsp;3.	Storage in GiB
+                    <br><br> We also store a value for each item as well as a popularity score which is used to inform the distribution of item types as discussed in the problem modelling section.
+                    
                     <br><br><br>
                     
                     <h2 id="results"><a href="#results">5. Results</a></h2>
                     <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
+                    <h3>Bin packing environment</h3><br>
+                    To set a baseline, I first developed a stochastic model which would take actions at random in our environment. The results of this control model were then compared to the DRL agent trained using constant reward values
+                    with no discard penalty. The results of which can be seen below:
 
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
+                    <div align="center">
+                        <br><img src="images/control_vs_drl.jpg" alt="A bar chart showing a comparison between the control environment and the deep reinforcement learning model"><br>
+                    </div> 
+
+                    <br><br><br>
+
+                    <h3>Knapsack environment</h3><br>
+
+                    It was challenging to balance accuracy in this environment with maximizing the value of each bin; there appeared to be an inverse correlation between these two factors which suggested 
+                    that the agent was only able to optimize along one dimension. It may be that the attributes of a PPO algorithm which allow it to generalise solutions for complex environments without 
+                    underfitting may also cause it to overfit certain attributes in the data; specifically, it will latch onto one maxima at the expense of another.
+
+                    <br><br><br>
+
+                    <h3>VM Allocation environment</h3><br>
+
+                    Unfortunately, I was unable to produce results in this environment that improved upon the control run; I suspect that the DRL agent had difficulties learning the correlation between such a complex environment and the reward signal.
+                    The below graph shows the similarities between the stochastic model and the trained model, showing almost no variation even after 1,000,000 timesteps.
+
+                    <div align="center">
+                        <br><img src="images/vm_allocation_results.jpg" alt="A bar chart showing a comparison between the control environment and the deep reinforcement learning model in the VM allocation environment"><br>
+                    </div> 
 
                     <br><br><br>
                     
                     <h2 id="conclusions"><a href="#conclusions">6. Conclusions</a></h2>
                     <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
+                    While I was unable to produce results for more complex environments, the success of our agent in the bin packing environment suggests that it should be possible to use deep reinforcement learning to solve such problems. 
+                    The domain modelling developed as part of this project is a useful contribution to the area; it models the key components of the problem in a way that is easy to intuit and implement as a programmer and allows the agent 
+                    to assess the full environment state in a straightforward way.<br><br>
+                    Excellent results were achieved in the 1-dimensional bin packing environment, although there was a clear trade-off between accuracy and efficiency. This makes sense; over a large enough number of steps, we would be 
+                    guaranteed to generate an item that was ‘just right’, but this behaviour is clearly at odds with a solution that does not waste too many steps and reject too many requests for not being perfect. An interesting approach 
+                    may be to have an incremental discard penalty which increases by some factor each successive time an item is discarded.<br><br>
+                    I feel that solving this problem may not be as simple as associating a set reward value for an action without considering the bigger picture. While it is true that it’s the job of the DRL agent to consider long-term 
+                    reward as well as instant gratification when fine-tuning the model, I would be concerned that our ‘condition-agnostic’ reward values may be making it difficult to converge on a solution in such chaotic environments.
 
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
-
-                    <br><br><br>
-                    
-                    <h2 id="future_work"><a href="#future_work">7. Future Work</a></h2>
-                    <hr><br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porta, urna et fringilla vulputate, odio massa maximus lacus, sed vulputate velit nulla a velit. Ut at posuere urna.
-                    Sed maximus aliquet dolor faucibus finibus. Curabitur suscipit molestie ultrices. Sed nec placerat ipsum, quis rhoncus purus. Aenean in metus congue, auctor magna eget, tristique est.
-                    Praesent leo erat, maximus ut volutpat et, placerat non justo. Mauris at purus lectus.
-
-                    Donec id ultrices tellus, at ultrices tortor. Cras iaculis felis ac ligula viverra maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio justo, ultricies a dui ut,
-                    feugiat suscipit magna. In hac habitasse platea dictumst. Aenean ac neque in eros feugiat congue vel at augue. Aliquam bibendum a lectus quis pretium. Etiam congue suscipit lacus,
-                    eget tincidunt nisl venenatis vitae. Ut at dui eget velit sollicitudin iaculis. In ut dapibus est, at luctus lacus. Sed tristique est pulvinar porttitor mattis.    
 
                     <br><br><br>
                 </p>
